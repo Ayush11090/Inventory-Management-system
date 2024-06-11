@@ -67,7 +67,7 @@ The frontend will fetch data from the backend every 5 seconds and update the dis
 
 You can import the following Postman collection to easily test the API endpoints:
 
-[Postman Collection Link](#)
+[https://www.postman.com/ayushbillade/workspace/my-workspace/collection/29080181-4fc7d17a-209a-4cea-922f-b58119a9262d?action=share&creator=29080181](#)
 
 
 ## License
