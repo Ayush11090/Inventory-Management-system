@@ -26,10 +26,10 @@ This project is a simple inventory management system built using Node.js and Exp
 git clone https://github.com/yourusername/inventory-management-system.git
 ```
 
-2. Navigate to the project directory:
+2. Navigate to the project server directory:
 
 ```bash
-cd inventory-management-system
+cd inventory-management-system/server
 ```
 
 3. Install the dependencies:
