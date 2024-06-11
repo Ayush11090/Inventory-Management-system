@@ -1,5 +1,3 @@
-Here's a README.md file for your Inventory Management System project:
-
 
 # Inventory Management System
 
