@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            align-items: center;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            padding: 8px;
+            margin-bottom: 10px;
+            width: 200px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        /* Flexbox Layout */
+        .flex-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between; /* Space between columns */
+            align-items: center; /* Align items vertically center */
+        }
+
+        .flex-column {
+            display: flex;
+            flex-direction: column;
+            margin-right: 30px;
+            align-items: center; /* Align items horizontally center */
+        }
+
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Inventory Management System</h1>
+    <div id="result"></div>
+    <div class="flex-container flex-row">
+        <div class="flex-container flex-column">
+            <h2>Add Item to Inventory</h2>
+            <input type="text" id="addItemProductId" placeholder="Product ID">
+            <input type="number" id="addItemQuantity" placeholder="Quantity">
+            <button onclick="addItemToInventory()">Add Item</button>
+
+            <h2>Add Item Price</h2>
+            <input type="text" id="addItemPriceProductId" placeholder="Product ID">
+            <input type="number" id="addItemPrice" placeholder="Price">
+            <button onclick="addItemPrice()">Add Item</button>
+
+            <h2>Remove Item from Inventory</h2>
+            <input type="text" id="removeItemProductId" placeholder="Product ID">
+            <input type="number" id="removeItemQuantity" placeholder="Quantity">
+            <button onclick="removeItemFromInventory()">Remove Item</button>
+            
+        </div>
+        <div class="flex-container flex-column">
+            <h2>Add Item to Cart</h2>
+            <input type="text" id="addToCartCustomerId" placeholder="Customer ID">
+            <input type="text" id="addToCartProductId" placeholder="Product ID">
+            <input type="number" id="addToCartQuantity" placeholder="Quantity">
+            <button onclick="addItemToCart()">Add to Cart</button>
+
+            <h2>Apply Discount Coupon</h2>
+            <input type="text" id="applyDiscountCustomerId" placeholder="Customer ID">
+            <input type="number" id="discountPercentage" placeholder="Discount Percentage">
+            <input type="number" id="maxDiscount" placeholder="Max Discount">
+            <button onclick="applyDiscountCoupon()">Apply Coupon</button>
+            </div>
+        <div>
+            <h2>Inventory</h2>
+            <div id="inventory"></div>
+
+            <h2>Carts</h2>
+            <div id="carts"></div>
+
+            <h2>Prices</h2>
+            <div id="prices"></div>
+
+
+        </div>
+    </div>
+    <script>
+        function fetchAllData() {
+            fetch('http://localhost:3000/getAllData')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayInventory(data.inventory);
+                    displayCarts(data.carts);
+                    displayPrices(data.prices);
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+
+        function displayInventory(inventory) {
+            const container = document.getElementById('inventory');
+            container.innerHTML = '';
+
+            if (Object.keys(inventory).length === 0) {
+                container.innerText = 'No data available';
+                return;
+            }
+
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+
+            // Create table headers
+            const headerRow = document.createElement('tr');
+            const headers = ['Product ID', 'Quantity'];
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                th.innerText = header;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+
+            // Create table rows
+            Object.entries(inventory).forEach(([productId, quantity]) => {
+                const row = document.createElement('tr');
+                const cellProductId = document.createElement('td');
+                const cellQuantity = document.createElement('td');
+
+                cellProductId.innerText = productId;
+                cellQuantity.innerText = quantity;
+
+                row.appendChild(cellProductId);
+                row.appendChild(cellQuantity);
+                tbody.appendChild(row);
+            });
+
+            table.appendChild(thead);
+            table.appendChild(tbody);
+            container.appendChild(table);
+        }
+
+        function displayCarts(carts) {
+            const container = document.getElementById('carts');
+            container.innerHTML = '';
+
+            if (Object.keys(carts).length === 0) {
+                container.innerText = 'No data available';
+                return;
+            }
+
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+
+            // Create table headers
+            const headerRow = document.createElement('tr');
+            const headers = ['Customer ID', 'Product ID', 'Quantity'];
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                th.innerText = header;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+
+            // Create table rows
+            Object.entries(carts).forEach(([customerId, cart]) => {
+                Object.entries(cart.items).forEach(([productId, quantity]) => {
+                    const row = document.createElement('tr');
+                    const cellCustomerId = document.createElement('td');
+                    const cellProductId = document.createElement('td');
+                    const cellQuantity = document.createElement('td');
+
+                    cellCustomerId.innerText = customerId;
+                    cellProductId.innerText = productId;
+                    cellQuantity.innerText = quantity;
+
+                    row.appendChild(cellCustomerId);
+                    row.appendChild(cellProductId);
+                    row.appendChild(cellQuantity);
+                    tbody.appendChild(row);
+                });
+            });
+
+            table.appendChild(thead);
+            table.appendChild(tbody);
+            container.appendChild(table);
+        }
+
+        function displayPrices(prices) {
+            const container = document.getElementById('prices');
+            container.innerHTML = '';
+
+            if (Object.keys(prices).length === 0) {
+                container.innerText = 'No data available';
+                return;
+            }
+
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+
+            // Create table headers
+            const headerRow = document.createElement('tr');
+            const headers = ['Product ID', 'Price'];
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                th.innerText = header;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+
+            // Create table rows
+            Object.entries(prices).forEach(([productId, price]) => {
+                const row = document.createElement('tr');
+                const cellProductId = document.createElement('td');
+                const cellPrice = document.createElement('td');
+
+                cellProductId.innerText = productId;
+                cellPrice.innerText = price;
+
+                row.appendChild(cellProductId);
+                row.appendChild(cellPrice);
+                tbody.appendChild(row);
+            });
+
+            table.appendChild(thead);
+            table.appendChild(tbody);
+            container.appendChild(table);
+        }
+
+        function addItemToInventory() {
+            const productId = document.getElementById('addItemProductId').value;
+            const quantity = parseInt(document.getElementById('addItemQuantity').value);
+
+            fetch('http://localhost:3000/addItemToInventory', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productId, quantity })
+            })
+            .then(response => response.text())
+            .then(data => {
+                window.alert(data);
+                fetchAllData(); // Refresh data after adding item to inventory
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function addItemPrice() {
+            const productId = document.getElementById('addItemPriceProductId').value;
+            const price = parseInt(document.getElementById('addItemPrice').value);
+
+            fetch('http://localhost:3000/addItemPrice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productId, price })
+            })
+            .then(response => response.text())
+            .then(data => {
+                window.alert(data);
+                fetchAllData(); // Refresh data after adding item price
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function removeItemFromInventory() {
+            const productId = document.getElementById('removeItemProductId').value;
+            const quantity = parseInt(document.getElementById('removeItemQuantity').value);
+
+            fetch('http://localhost:3000/removeItemFromInventory', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productId, quantity })
+            })
+            .then(response => response.text())
+            .then(data => {
+                window.alert(data);
+                fetchAllData(); // Refresh data after removing item from inventory
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function addItemToCart() {
+            const customerId = document.getElementById('addToCartCustomerId').value;
+            const productId = document.getElementById('addToCartProductId').value;
+            const quantity = parseInt(document.getElementById('addToCartQuantity').value);
+
+            fetch('http://localhost:3000/addItemToCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ customerId, productId, quantity })
+            })
+            .then(response => response.text())
+            .then(data => {
+                window.alert(data);
+                fetchAllData(); // Refresh data after adding item to cart
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function applyDiscountCoupon() {
+            const customerId = document.getElementById('applyDiscountCustomerId').value;
+            const discountPercentage = parseInt(document.getElementById('discountPercentage').value);
+            const maxDiscount = parseInt(document.getElementById('maxDiscount').value);
+
+            fetch('http://localhost:3000/applyDiscountCoupon', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ customerId, discountPercentage, maxDiscount })
+            })
+            .then(response => response.text())
+            .then(data => {
+                window.alert(data);
+                fetchAllData(); // Refresh data after applying discount coupon
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Fetch data every 5 seconds
+        setInterval(fetchAllData, 5000);
+        // Fetch data immediately on page load
+        fetchAllData();
+    </script>
+</body>
+</html>

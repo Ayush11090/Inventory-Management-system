@@ -1,0 +1,180 @@
+{
+	"info": {
+		"_postman_id": "4fc7d17a-209a-4cea-922f-b58119a9262d",
+		"name": "Inventory Management System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29080181"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/addItemToInventory",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productId\": \"p1\",\r\n    \"quantity\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/addItemToInventory",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"addItemToInventory"
+					]
+				},
+				"description": "This endpoint adds a specified quantity of a product to the inventory.  \n\n**Example Response:**\n\n- Status: 200 OK\n    \n- Body: `Item added to inventory`"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/addItemPrice",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productId\": \"p1\",\r\n    \"price\": 400\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/addItemPrice",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"addItemPrice"
+					]
+				},
+				"description": "This endpoint sets the price of a product in the inventory.  \n\n**Example Response:**\n\n- Status: 200 OK\n    \n- Body: `Item price added`"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/addItemToCart",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"customerId\": \"123\",\r\n   \"productId\": \"p1\",\r\n   \"quantity\": 3\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/addItemToCart",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"addItemToCart"
+					]
+				},
+				"description": "This endpoint adds a specified quantity of a product to a customer's cart.\n\n**Example Response:**\n\n- Status: 200 OK\n    \n- Body: `Item added to cart`"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/applyDiscountCoupon",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerId\": \"123\",\r\n    \"discountPercentage\": 30,\r\n    \"maxDiscount\": 500\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/applyDiscountCoupon",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"applyDiscountCoupon"
+					]
+				},
+				"description": "This endpoint applies a discount coupon to a customer's cart.  \n  \n**Example Response:**\n\n- Status: 200 OK\n    \n- Body: `Discounted price:`"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/removeItemFromInventory",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"productId\": \"p1\",\r\n  \"quantity\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/removeItemFromInventory",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"removeItemFromInventory"
+					]
+				},
+				"description": "This endpoint removes a specified quantity of a product from the inventory.  \n  \n\n**Example Response:**\n\n- Status: 200 OK\n    \n- Body: `Item removed from inventory`"
+			},
+			"response": []
+		}
+	]
+}
