@@ -1,6 +1,6 @@
 Here's a README.md file for your Inventory Management System project:
 
-```markdown
+
 # Inventory Management System
 
 This project is a simple inventory management system built using Node.js and Express. It allows you to manage inventory items, their prices, and customer carts. Additionally, it supports applying discount coupons to the items in a cart.
